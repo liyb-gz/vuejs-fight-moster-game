@@ -81,9 +81,33 @@ new Vue({
     computed: {
         reversedMessages() {
             return this.messages.slice().reverse()
+        },
+        youHealthStyle () {
+            return this.healthStyle(this.you)
+        },
+        monsterHealthStyle () {
+            return this.healthStyle(this.monster)
         }
     },
     methods: {
+        healthStyle(player) {
+            let health = (player.health / player.maxHealth) * 100
+            let width = health + '%'
+
+            let backgroundColor
+            if (health > 70) {
+                backgroundColor = 'green'
+            } else if (health > 30) {
+                backgroundColor = '#cccc00'
+            } else {
+                backgroundColor = 'red'
+            }
+
+            return {
+                width: width,
+                backgroundColor: backgroundColor
+            }
+        },
         startNewGame () {
             this.isStarted = true
             this.you.health = this.you.maxHealth
@@ -129,10 +153,12 @@ new Vue({
         },
         executeTurn () {
             if (!this.isEnded()) {
-                this.monsterAction()
-                if (this.isEnded()) {
-                    this.endGame()
-                }
+                setTimeout(() => {
+                    this.monsterAction()
+                    if (this.isEnded()) {
+                        this.endGame()
+                    }
+                }, 500)
             } else {
                 this.endGame()
             }
