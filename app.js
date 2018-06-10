@@ -76,7 +76,8 @@ new Vue({
         isStarted: false,
         you: new Player('you', 100),
         monster: new Player('monster', 100),
-        messages: []
+        messages: [],
+        actionDisabled: false
     },
     computed: {
         reversedMessages() {
@@ -153,8 +154,10 @@ new Vue({
         },
         executeTurn () {
             if (!this.isEnded()) {
+                this.actionDisabled = true
                 setTimeout(() => {
                     this.monsterAction()
+                    this.actionDisabled = false
                     if (this.isEnded()) {
                         this.endGame()
                     }
